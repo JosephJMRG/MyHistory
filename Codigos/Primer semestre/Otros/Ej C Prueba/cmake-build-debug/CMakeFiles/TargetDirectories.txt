@@ -1,3 +1,0 @@
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Ej C Prueba/cmake-build-debug/CMakeFiles/Ej_C_Prueba.dir
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Ej C Prueba/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Ej C Prueba/cmake-build-debug/CMakeFiles/rebuild_cache.dir

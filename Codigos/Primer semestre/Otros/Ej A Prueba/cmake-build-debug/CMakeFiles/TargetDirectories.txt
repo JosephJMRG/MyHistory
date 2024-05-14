@@ -1,3 +1,0 @@
-C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Ej A Prueba/cmake-build-debug/CMakeFiles/Ej_A_Prueba.dir
-C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Ej A Prueba/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Ej A Prueba/cmake-build-debug/CMakeFiles/rebuild_cache.dir
