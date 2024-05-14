@@ -1,3 +1,0 @@
-D:/CLASES U/Introd. a la Inf/CLion/Códigos/Primer semestre/Gato/cmake-build-debug/CMakeFiles/Gato.dir
-D:/CLASES U/Introd. a la Inf/CLion/Códigos/Primer semestre/Gato/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/CLASES U/Introd. a la Inf/CLion/Códigos/Primer semestre/Gato/cmake-build-debug/CMakeFiles/rebuild_cache.dir

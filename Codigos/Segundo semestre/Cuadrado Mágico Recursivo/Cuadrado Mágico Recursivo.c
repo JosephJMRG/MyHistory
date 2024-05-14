@@ -10,7 +10,7 @@ int esValido(int tablero[TAMANO][TAMANO], int numero);
 int esCuadradoMagico(int tablero[TAMANO][TAMANO]);
 int esTableroCompleto(int tablero[TAMANO][TAMANO]);
 
-void main()
+int main()
 {
     int tablero[TAMANO][TAMANO];
     inicializarTablero(tablero);
@@ -22,6 +22,7 @@ void main()
     {
         printf("\nNo hay solucion\n");
     }
+    return 0;
 }
 
 int buscarSolucion(int tablero[TAMANO][TAMANO], int fila, int columna)

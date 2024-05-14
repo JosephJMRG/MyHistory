@@ -1,3 +1,0 @@
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Par_Impar/cmake-build-debug/CMakeFiles/untitled.dir
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Par_Impar/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/CLASES U/Introd. a la Inf/CLion/Entregas/Par_Impar/cmake-build-debug/CMakeFiles/rebuild_cache.dir
