@@ -1,0 +1,3 @@
+C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Toque_y_Fama/cmake-build-debug/CMakeFiles/Toque_y_Fama.dir
+C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Toque_y_Fama/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/jases/Desktop/U/Introd. a la Inf/CLion/Códigos/Toque_y_Fama/cmake-build-debug/CMakeFiles/rebuild_cache.dir

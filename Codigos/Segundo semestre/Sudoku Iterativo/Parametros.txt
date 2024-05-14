@@ -1,0 +1,30 @@
+Cosas a hacer:
+E L  S U D O K U
+
+/*
+        Sudoku
+
+Debes rellenar los cuadrantes sin que se repitan los numeros,
+comparando entre filas y columnas.
+
+Reglas:
+1.- Llenar solo con numeros del 1 al 9
+2.- Los numeros no se pueden repetir en el mismo cuadrante
+3.- Los numeros no se pueden repetir, comparando filas y columnas
+*/
+
+/*
+        Plantilla Iterativa
+
+while (hayCandidato && noSolucion) {
+    if (valido) {
+        avanza++;
+        if (final) {
+            solucion = 1
+        }
+    } siguienteCandidato++;
+    while (noHayCandidato && noInicio) {
+        retrocede++;
+    }
+}
+*/

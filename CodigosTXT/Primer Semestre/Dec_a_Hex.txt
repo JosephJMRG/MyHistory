@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+void DecAHex(int n) {
+    char hex[100];
+    int i = 0;
+
+// Bucle para realizar divisiones sucesivas hasta que n sea igual o menor que 0
+    while (n > 0) {
+        int resto = n % 16;
+        if (resto < 10)
+            hex[i] = resto + '0'; // Si el resto es menor que 10, se asigna el dígito correspondiente
+        else
+            hex[i] = resto - 10 + 'A'; // Si el resto es mayor o igual a 10, se asigna el dígito hexadecimal correspondiente
+        n /= 16;
+        i++;
+    }
+
+    printf("El numero hexadecimal es: ");
+    for (int j = i - 1; j >= 0; j--) // Recorre el arreglo hex[] en orden inverso para imprimir los dígitos hexadecimales en el orden correcto
+        printf("%c", hex[j]); // Imprime cada dígito hexadecimal
+}
+
+int main() {
+    int num;
+    printf("Ingrese un nmero: ");
+    scanf("%d", &num);
+
+    DecAHex(num); // Llama a la función DecAHex para realizar la conversión decimal a hexadecimal
+
+    return 0;
+}

@@ -1,0 +1,334 @@
+
+Primer codigo que hice, funcional. (Sin plantilla iterativa)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h> // Para usleep
+
+#define TAB 9
+
+void mostrarTablero(int tablero[TAB][TAB])
+{
+    for (int i = 0; i < TAB; i++)
+    {
+        for (int j = 0; j < TAB; j++)
+        {
+            printf("%2d", tablero[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void limpiarTablero(int tablero[TAB][TAB])
+{
+    for (int i = 0; i < TAB; i++)
+    {
+        for (int j = 0; j < TAB; j++)
+        {
+            tablero[i][j] = 0;
+        }
+    }
+}
+
+int existeEnFila(int tablero[TAB][TAB], int fila, int num)
+{
+    for (int j = 0; j < TAB; j++)
+    {
+        if (tablero[fila][j] == num)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int existeEnColumna(int tablero[TAB][TAB], int columna, int num)
+{
+    for (int i = 0; i < TAB; i++)
+    {
+        if (tablero[i][columna] == num)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int existeEnCuadrante(int tablero[TAB][TAB], int fila, int columna, int num)
+{
+    int inicioFila = fila - (fila % 3);
+    int inicioColumna = columna - (columna % 3);
+
+    for (int i = inicioFila; i < inicioFila + 3; i++)
+    {
+        for (int j = inicioColumna; j < inicioColumna + 3; j++)
+        {
+            if (tablero[i][j] == num)
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+void genNumsTablero(int tablero[TAB][TAB])
+{
+    srand(time(NULL));
+    int cantNum = rand() % 36 + 1;
+
+    for (int i = 0; i < cantNum; i++)
+    {
+        int fila = rand() % TAB;
+        int columna = rand() % TAB;
+        int num = 0;
+
+        while (existeEnFila(tablero, fila, num) || existeEnColumna(tablero, columna, num) || existeEnCuadrante(tablero, fila, columna, num))
+        {
+            num = rand() % 9 + 1;
+        }
+
+        tablero[fila][columna] = num;
+    }
+}
+
+int resolverSudoku(int tablero[TAB][TAB])
+{
+    int fila, columna;
+
+    // Crear una copia del tablero original
+    int tableroCopia[TAB][TAB];
+    for (fila = 0; fila < TAB; fila++)
+    {
+        for (columna = 0; columna < TAB; columna++)
+        {
+            tableroCopia[fila][columna] = tablero[fila][columna];
+        }
+    }
+
+    for (fila = 0; fila < TAB; fila++)
+    {
+        for (columna = 0; columna < TAB; columna++)
+        {
+            if (tablero[fila][columna] == 0)
+            {
+                for (int num = 1; num <= 9; num++)
+                {
+                    if (!existeEnFila(tablero, fila, num) && !existeEnColumna(tablero, columna, num) && !existeEnCuadrante(tablero, fila, columna, num))
+                    {
+                        tablero[fila][columna] = num;
+
+                        // Mostrar el tablero original
+                        mostrarTablero(tableroCopia);
+                        printf("\n");
+
+                        // Esperar un poco para visualizar
+                        usleep(10000);
+
+                        if (resolverSudoku(tablero))
+                            return 1;
+
+                        tablero[fila][columna] = 0;
+                    }
+                }
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+int main()
+{
+    int tablero[TAB][TAB];
+
+    limpiarTablero(tablero);
+    genNumsTablero(tablero);
+    mostrarTablero(tablero);
+
+    printf("\n\nSudoku resuelto:\n");
+
+    if (resolverSudoku(tablero))
+        mostrarTablero(tablero);
+    else
+        printf("No se encontró solución.\n");
+
+    return 0;
+}
+
+
+Codigo con plantilla, No funcional.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
+#define TAB 9
+
+void mostrarTablero(int tablero[TAB][TAB]) {
+    for (int i = 0; i < TAB; i++) {
+        for (int j = 0; j < TAB; j++) {
+            printf("%2d", tablero[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void limpiarTablero(int tablero[TAB][TAB]) {
+    for (int i = 0; i < TAB; i++) {
+        for (int j = 0; j < TAB; j++) {
+            tablero[i][j] = 0;
+        }
+    }
+}
+
+int existeEnFila(int tablero[TAB][TAB], int fila, int num) {
+    for (int j = 0; j < TAB; j++) {
+        if (tablero[fila][j] == num) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int existeEnColumna(int tablero[TAB][TAB], int columna, int num) {
+    for (int i = 0; i < TAB; i++) {
+        if (tablero[i][columna] == num) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int existeEnCuadrante(int tablero[TAB][TAB], int fila, int columna, int num) {
+    int inicioFila = fila - (fila % 3);
+    int inicioColumna = columna - (columna % 3);
+
+    for (int i = inicioFila; i < inicioFila + 3; i++) {
+        for (int j = inicioColumna; j < inicioColumna + 3; j++) {
+            if (tablero[i][j] == num) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+void genNumsTablero(int tablero[TAB][TAB]) {
+    srand(time(NULL));
+    int cantNum = rand() % 36 + 1;
+
+    for (int i = 0; i < cantNum; i++) {
+        int fila = rand() % TAB;
+        int columna = rand() % TAB;
+        int num = 0;
+
+        while (existeEnFila(tablero, fila, num) || existeEnColumna(tablero, columna, num) || existeEnCuadrante(tablero, fila, columna, num)) {
+            num = rand() % 9 + 1;
+        }
+
+        tablero[fila][columna] = num;
+    }
+}
+
+int resolverSudoku(int tablero[TAB][TAB])
+{
+    int fila, columna;
+
+    // Crear una copia del tablero original
+    int tableroCopia[TAB][TAB];
+    for (fila = 0; fila < TAB; fila++)
+    {
+        for (columna = 0; columna < TAB; columna++)
+        {
+            tableroCopia[fila][columna] = tablero[fila][columna];
+        }
+    }
+
+    int hayCandidato = 1;
+    int noSolucion = 1;
+
+    while (hayCandidato && noSolucion)
+    {
+        int avanza = 0;
+
+        for (fila = 0; fila < TAB; fila++)
+        {
+            for (columna = 0; columna < TAB; columna++)
+            {
+                if (tablero[fila][columna] == 0)
+                {
+                    for (int num = 1; num <= 9; num++)
+                    {
+                        if (!existeEnFila(tablero, fila, num) && !existeEnColumna(tablero, columna, num) && !existeEnCuadrante(tablero, fila, columna, num))
+                        {
+                            tablero[fila][columna] = num;
+
+                            // Mostrar el tablero original
+                            mostrarTablero(tableroCopia);
+                            printf("\n");
+
+                            // Esperar un poco para visualizar
+                            usleep(10000);
+
+                            if (resolverSudoku(tablero))
+                                return 1;
+
+                            tablero[fila][columna] = 0;
+                        }
+                    }
+                    avanza = 1;
+                    break;
+                }
+            }
+            if (avanza)
+                break;
+        }
+
+        if (!avanza) {
+            int retrocede = 0;
+
+            for (fila = 0; fila < TAB; fila++)
+            {
+                for (columna = 0; columna < TAB; columna++)
+                {
+                    if (tablero[fila][columna] != tableroCopia[fila][columna])
+                    {
+                        tablero[fila][columna] = tableroCopia[fila][columna];
+                        retrocede = 1;
+                        break;
+                    }
+                }
+                if (retrocede)
+                    break;
+            }
+
+            if (!retrocede)
+                hayCandidato = 0;
+        }
+    }
+
+    return 1;
+}
+
+
+int main() {
+    int tablero[TAB][TAB];
+
+    limpiarTablero(tablero);
+    genNumsTablero(tablero);
+    mostrarTablero(tablero);
+
+    printf("\n\nSudoku resuelto:\n");
+
+    if (resolverSudoku(tablero)) {
+        mostrarTablero(tablero);
+    } else {
+        printf("No se encontró solución.\n");
+    }
+
+    return 0;
+}

@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <math.h>
+
+void OctalADecimal() {
+    int NumOctal, NumDecimal = 0, i = 0, remainder;
+
+    printf("Ingrese un numero octal: ");
+    scanf("%d", &NumOctal);
+
+    while (NumOctal != 0) {
+        remainder = NumOctal % 10;
+        NumOctal /= 10;
+        NumDecimal += remainder * pow(8, i);
+        ++i;
+    }
+
+    printf("El numero decimal es: %d\n", NumDecimal);
+}
+
+int main() {
+    OctalADecimal();
+
+    return 0;
+}

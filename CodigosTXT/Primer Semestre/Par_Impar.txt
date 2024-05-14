@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+void ParImpar() {
+    int numero;
+
+    printf("Ingrese un numero entero: ");
+    scanf("%d", &numero);
+
+    if (numero % 2 == 0) {
+        printf("El numero es par.\n");
+    } else {
+        printf("El numero es impar.\n");
+    }
+
+    printf("\n");
+}
+
+int main() {
+	ParImpar();
+
+	return 0;
+}

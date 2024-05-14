@@ -1,0 +1,487 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#define TAM_TABLERO 10
+#define NUM_BARCOS 5
+
+
+void mostrarTablero(char tablero[TAM_TABLERO][TAM_TABLERO]) {
+    printf("Tablero:\n"); // Imprime el encabezado del tablero
+    printf("  1 2 3 4 5 6 7 8 9 10\n"); // Imprime los números de columna
+
+    int i = 0;
+    while (i < TAM_TABLERO) { // Recorre las filas del tablero
+        printf("%c ", 'A' + i); // Imprime la letra de la fila
+
+        int j = 0;
+        while (j < TAM_TABLERO) { // Recorre las columnas del tablero
+            char celda = tablero[i][j]; // Obtiene el valor de la celda en la posición (i, j)
+
+            if (celda == '-') { // Si la celda está vacía
+                printf("%c ", '-'); // Imprime un guión
+            } else { // Si la celda contiene un barco u otro estado
+                printf("%c ", celda); // Imprime el valor de la celda
+            }
+
+            j++; // Incrementa el índice de columna
+        }
+
+        printf("\n"); // Imprime un salto de línea para pasar a la siguiente fila
+        i++; // Incrementa el índice de fila
+    }
+
+    printf("\n"); // Imprime un salto de línea adicional al final del tablero
+}
+
+
+void mostrarTableroPosicionado(char tablero[TAM_TABLERO][TAM_TABLERO]) {
+    printf("\nTablero de Jugador 1:\n"); // Imprime el encabezado del tablero de Jugador 1
+    mostrarTablero(tablero); // Llama a la función mostrarTablero para mostrar el tablero completo
+}
+
+
+int validarPosicion(char tablero[TAM_TABLERO][TAM_TABLERO], char fila, int columna, int direccion, int tam_barco) {
+    int fila_num = fila - 'A'; // Convierte la letra de la fila a un índice numérico
+    int i = 0;
+    while (i < tam_barco) { // Itera a través de las celdas del barco
+        // Verifica las condiciones de posición válida
+        if (fila_num < 0 || fila_num >= TAM_TABLERO || columna < 0 || columna >= TAM_TABLERO ||
+            tablero[fila_num][columna] != '-') {
+            return 0; // Retorna 0 si alguna de las condiciones no se cumple
+        }
+        if (direccion == 0) { // Si la dirección es horizontal
+            if (columna + 1 >= TAM_TABLERO) {
+                return 0; // El barco se sale del tablero
+            }
+            columna++; // Incrementa la columna para la siguiente celda del barco
+        } else { // Si la dirección es vertical
+            if (fila_num + 1 >= TAM_TABLERO) {
+                return 0; // El barco se sale del tablero
+            }
+            fila_num++; // Incrementa la fila para la siguiente celda del barco
+        }
+        i++; // Incrementa el contador de celdas del barco
+    }
+    return 1; // Retorna 1 si todas las celdas cumplen las condiciones de posición válida
+}
+
+
+void colocarBarco(char tablero[TAM_TABLERO][TAM_TABLERO], char barco, char fila, int columna, int direccion, int tam_barco) {
+    int fila_num = fila - 'A'; // Convierte la letra de la fila a un índice numérico
+    int i = 0;
+    while (i < tam_barco) { // Itera a través de las celdas del barco
+        tablero[fila_num][columna] = barco; // Coloca el símbolo del barco en la celda correspondiente
+        if (direccion == 0) { // Si la dirección es horizontal
+            columna++; // Incrementa la columna para la siguiente celda del barco
+        } else { // Si la dirección es vertical
+            fila_num++; // Incrementa la fila para la siguiente celda del barco
+        }
+        i++; // Incrementa el contador de celdas del barco
+    }
+}
+
+
+void mostrarBarcosDisponibles(int colocados[], char nombres[][20], int tamanios[]) {
+    printf("\nBarcos disponibles:\n");
+    int i = 0;
+    while (i < NUM_BARCOS) { // Itera a través de los barcos
+        if (colocados[i] == 0) { // Si el barco no está colocado
+            printf("%d. [Disponible] - %s (%d celdas)\n", i + 1, nombres[i], tamanios[i]);
+        } else { // Si el barco está colocado
+            printf("%d. [Colocado] - %s (%d celdas)\n", i + 1, nombres[i], tamanios[i]);
+        }
+        i++; // Incrementa el contador de barcos
+    }
+}
+
+
+int obtenerSeleccionBarco(int colocados[]) {
+    printf("\nSelecciona el número de barco que deseas posicionar: ");
+    int opcion;
+    scanf("%d", &opcion);
+
+    if (opcion < 1 || opcion > NUM_BARCOS) { // Verifica si la opción es válida
+        printf("Opción inválida. Por favor, selecciona un número de barco válido.\n");
+        return -1; // Retorna -1 para indicar una selección inválida
+    }
+
+    if (colocados[opcion - 1] == 1) { // Verifica si el barco ya está colocado
+        printf("¡Barco ya colocado! Por favor, selecciona otro barco.\n");
+        return -1; // Retorna -1 para indicar un barco ya colocado
+    }
+
+    return opcion; // Retorna la opción seleccionada válida
+}
+
+
+void posicionarBarco(char tablero[TAM_TABLERO][TAM_TABLERO], char barco, int tam_barco, char nombre_barco[]) {
+    char fila;
+    int columna, direccion;
+
+    while (1) {
+        printf("Ingresa la fila inicial (A-J): ");
+        scanf(" %c", &fila);
+        fila = (fila >= 'a' && fila <= 'j') ? (fila - 'a' + 'A') : fila; // Convertir a mayúsculas
+
+        if (fila < 'A' || fila > 'J') {
+            printf("Fila inválida. Ingresa una fila entre A y J.\n");
+            continue;
+        }
+
+        printf("Ingresa la columna inicial (1-10): ");
+        scanf("%d", &columna);
+
+        if (columna < 1 || columna > 10) {
+            printf("Columna inválida. Ingresa una columna entre 1 y 10.\n");
+            continue;
+        }
+
+        printf("Ingresa la dirección (0-horizontal, 1-vertical): ");
+        scanf("%d", &direccion);
+
+        if (direccion != 0 && direccion != 1) {
+            printf("Dirección inválida. Ingresa 0 para horizontal o 1 para vertical.\n");
+            continue;
+        }
+
+        columna--;
+
+        if (!validarPosicion(tablero, fila, columna, direccion, tam_barco)) {
+            printf("Posición inválida. Por favor, intenta nuevamente.\n");
+        } else {
+            break;
+        }
+    }
+
+    colocarBarco(tablero, barco, fila, columna, direccion, tam_barco);
+
+    printf("¡Barco %s posicionado correctamente!\n", nombre_barco);
+
+    mostrarTableroPosicionado(tablero);
+}
+
+
+void posicionarBarcos(char tablero[TAM_TABLERO][TAM_TABLERO]) {
+    int barcos_colocados = 0;
+
+    // Definir los barcos disponibles con sus tamaños y nombres
+    char barcos[NUM_BARCOS] = {'P', 'B', 'D', 'S', 'T'};
+    int tamanios[NUM_BARCOS] = {5, 4, 3, 3, 2};
+    char nombres[NUM_BARCOS][20] = {"Portaaviones", "Buque de Guerra", "Destructor", "Submarino", "Patrullero"};
+
+    // Arreglo para almacenar el estado de colocación de los barcos
+    int colocados[NUM_BARCOS] = {0};
+
+    while (barcos_colocados < NUM_BARCOS) {
+        mostrarBarcosDisponibles(colocados, nombres, tamanios); // Mostrar los barcos disponibles
+
+        int opcion = obtenerSeleccionBarco(colocados); // Obtener la selección de barco del jugador
+        if (opcion == -1) {
+            continue; // Si la selección es inválida, volver al inicio del ciclo
+        }
+
+        // Obtener los datos del barco seleccionado
+        char barco = barcos[opcion - 1];
+        int tam_barco = tamanios[opcion - 1];
+        char nombre_barco[20];
+        strcpy(nombre_barco, nombres[opcion - 1]);
+
+        printf("Posiciona el barco %s de tamaño %d celdas.\n", nombre_barco, tam_barco);
+
+        // Posicionar el barco en el tablero
+        posicionarBarco(tablero, barco, tam_barco, nombre_barco);
+
+        // Actualizar el estado del barco a [Colocado]
+        colocados[opcion - 1] = 1;
+
+        barcos_colocados++;
+    }
+}
+
+
+void posicionarBarcosBot(char tablero[TAM_TABLERO][TAM_TABLERO]) {
+    srand(time(NULL)); // Inicializar la semilla aleatoria
+
+    int barcos_colocados = 0;
+
+    // Definir los barcos disponibles con sus tamaños y nombres
+    char barcos[NUM_BARCOS] = {'P', 'B', 'D', 'S', 'T'};
+    int tamanios[NUM_BARCOS] = {5, 4, 3, 3, 2};
+    char nombres[NUM_BARCOS][20] = {"Portaaviones", "Buque de Guerra", "Destructor", "Submarino", "Patrullero"};
+
+    // Arreglo para almacenar el estado de colocación de los barcos
+    int colocados[NUM_BARCOS] = {0};
+
+    while (barcos_colocados < NUM_BARCOS) {
+        int opcion = rand() % NUM_BARCOS; // Generar una opción aleatoria
+
+        if (colocados[opcion] == 1) {
+            continue; // Si el barco ya fue colocado, pasar a la siguiente iteración
+        }
+
+        // Obtener los datos del barco seleccionado
+        char barco = barcos[opcion];
+        int tam_barco = tamanios[opcion];
+        char nombre_barco[20];
+        strcpy(nombre_barco, nombres[opcion]);
+
+        int fila, columna, direccion;
+
+        // Generar aleatoriamente una posición y dirección válida para el barco
+        fila = rand() % TAM_TABLERO;
+        columna = rand() % TAM_TABLERO;
+        direccion = rand() % 2;
+
+        while (!validarPosicion(tablero, 'A' + fila, columna, direccion, tam_barco)) {
+            fila = rand() % TAM_TABLERO;
+            columna = rand() % TAM_TABLERO;
+            direccion = rand() % 2;
+        }
+
+        // Posicionar el barco en el tablero
+        colocarBarco(tablero, barco, 'A' + fila, columna, direccion, tam_barco);
+
+        colocados[opcion] = 1; // Actualizar el estado del barco a [Colocado]
+        barcos_colocados++;
+    }
+}
+
+
+void marcarBarcoHundido(char tablero_ataque[TAM_TABLERO][TAM_TABLERO], int fila, int columna) {
+    char barco = tablero_ataque[fila][columna];
+    int tam_barco = 0;
+
+    // Buscar el tamaño del barco contando las celdas con el mismo carácter
+    int i = 0;
+    while (i < TAM_TABLERO) {
+        int j = 0;
+        while (j < TAM_TABLERO) {
+            if (tablero_ataque[i][j] == barco) {
+                tam_barco++;
+            }
+            j++;
+        }
+        i++;
+    }
+
+    // Cambiar las celdas del barco a 'H' (hundido)
+    i = 0;
+    while (i < TAM_TABLERO) {
+        int j = 0;
+        while (j < TAM_TABLERO) {
+            if (tablero_ataque[i][j] == barco) {
+                tablero_ataque[i][j] = 'H';
+            }
+            j++;
+        }
+        i++;
+    }
+
+    printf("¡Barco %c hundido! Tamaño: %d\n", barco, tam_barco);
+}
+
+
+void obtenerAtaque(char* fila, int* columna) {
+    while (1) {
+        // Solicitar al usuario ingresar la fila de ataque (A-J)
+        printf("Ingresa la fila de ataque (A-J): ");
+        scanf(" %c", fila);
+
+        // Convertir la fila a mayúsculas si se ingresó en minúsculas
+        *fila = (*fila >= 'a' && *fila <= 'j') ? (*fila - 'a' + 'A') : *fila;
+
+        // Verificar si la fila ingresada es válida (A-J)
+        if (*fila < 'A' || *fila > 'J') {
+            printf("Fila inválida. Ingresa una fila entre A y J.\n");
+            continue;  // Continuar al siguiente ciclo para solicitar nuevamente la fila
+        }
+
+        // Solicitar al usuario ingresar la columna de ataque (1-10)
+        printf("Ingresa la columna de ataque (1-10): ");
+        scanf("%d", columna);
+
+        // Verificar si la columna ingresada es válida (1-10)
+        if (*columna < 1 || *columna > 10) {
+            printf("Columna inválida. Ingresa una columna entre 1 y 10.\n");
+            continue;  // Continuar al siguiente ciclo para solicitar nuevamente la columna
+        }
+
+        // Ajustar la columna al índice del tablero (0-9)
+        (*columna)--;
+
+        // Salir del bucle while, ya que se obtuvo una fila y columna válidas
+        break;
+    }
+}
+
+
+void realizarAtaqueJugador(char tablero[TAM_TABLERO][TAM_TABLERO], char tablero_ataque[TAM_TABLERO][TAM_TABLERO], char fila, int columna) {
+    // Verificar si la posición de ataque ya ha sido atacada previamente
+    if (tablero_ataque[fila - 'A'][columna] != '-') {
+        printf("Ya has atacado esa posición. Por favor, elige otra.\n");
+        return;  // Salir de la función, ya que no se puede realizar el ataque en una posición repetida
+    }
+
+    // Verificar si se ha acertado un barco enemigo en la posición de ataque
+    if (tablero[fila - 'A'][columna] != '-') {
+        printf("¡Has acertado un barco enemigo en la posición %c%d!\n", fila, columna + 1);
+        tablero_ataque[fila - 'A'][columna] = 'A';  // Marcar la posición de ataque como acertada en el tablero de ataque
+        tablero[fila - 'A'][columna] = 'A';  // Marcar la posición de ataque como acertada en el tablero del jugador
+
+        // Verificar si se hundió el barco
+        marcarBarcoHundido(tablero_ataque, fila - 'A', columna);
+    } else {
+        printf("¡Has fallado! No hay barco en la posición %c%d.\n", fila, columna + 1);
+        tablero_ataque[fila - 'A'][columna] = 'F';  // Marcar la posición de ataque como fallida en el tablero de ataque
+    }
+}
+
+
+void ataqueJugador(char tablero[TAM_TABLERO][TAM_TABLERO], char tablero_ataque[TAM_TABLERO][TAM_TABLERO]) {
+    char fila;
+    int columna;
+
+    // Obtener la fila y columna de ataque desde el usuario
+    obtenerAtaque(&fila, &columna);
+
+    // Realizar el ataque del jugador en la posición obtenida
+    realizarAtaqueJugador(tablero, tablero_ataque, fila, columna);
+}
+
+
+void AtaqueBot(char tablero[TAM_TABLERO][TAM_TABLERO], char tablero_ataque[TAM_TABLERO][TAM_TABLERO]) {
+    int fila, columna;
+
+    // Generar una posición de ataque aleatoria hasta encontrar una posición válida
+    while (1) {
+        fila = rand() % TAM_TABLERO;
+        columna = rand() % TAM_TABLERO;
+
+        // Verificar si la posición de ataque es válida (no ha sido atacada previamente)
+        if (tablero_ataque[fila][columna] == '-') {
+            break;
+        }
+    }
+
+    // Realizar el ataque del bot en la posición generada
+    if (tablero[fila][columna] != '-') {
+        printf("¡El Jugador 2 (Bot) ha acertado un barco en tu posición %c%d!\n", fila + 'A', columna + 1);
+        tablero_ataque[fila][columna] = 'A';
+        tablero[fila][columna] = 'A';
+
+        // Verificar si se hundió el barco
+        marcarBarcoHundido(tablero_ataque, fila - 'A', columna);
+    } else {
+        printf("El Jugador 2 (Bot) ha fallado en su ataque a la posición %c%d.\n", fila + 'A', columna + 1);
+        tablero_ataque[fila][columna] = 'F';
+    }
+}
+
+
+int verificarGanador(char tablero_ataque_jugador1[TAM_TABLERO][TAM_TABLERO], char tablero_ataque_jugador2[TAM_TABLERO][TAM_TABLERO]) {
+    int aciertos_jugador1 = 0;
+    int aciertos_jugador2 = 0;
+
+    // Contar el número de aciertos de cada jugador
+    int i = 0;
+    while (i < TAM_TABLERO) {
+        int j = 0;
+        while (j < TAM_TABLERO) {
+            if (tablero_ataque_jugador1[i][j] == 'H') {
+                aciertos_jugador1++;
+            }
+            if (tablero_ataque_jugador2[i][j] == 'H') {
+                aciertos_jugador2++;
+            }
+            j++;
+        }
+        i++;
+    }
+
+    // Verificar el resultado del juego
+    if (aciertos_jugador1 >= 17) {
+        return 1; // Jugador 1 ganó
+    } else if (aciertos_jugador2 >= 17) {
+        return 2; // Jugador 2 ganó
+    } else {
+        return 0; // Juego en progreso
+    }
+}
+
+
+int main() {
+    char tablero_jugador1[TAM_TABLERO][TAM_TABLERO];
+    char tablero_ataque_jugador1[TAM_TABLERO][TAM_TABLERO];
+    char tablero_jugador2[TAM_TABLERO][TAM_TABLERO];
+    char tablero_ataque_jugador2[TAM_TABLERO][TAM_TABLERO];
+
+    int jugar_nuevamente = 1;
+
+    // Inicializar tableros
+    int i = 0;
+    while (i < TAM_TABLERO) {
+        int j = 0;
+        while (j < TAM_TABLERO) {
+            tablero_jugador1[i][j] = '-';
+            tablero_ataque_jugador1[i][j] = '-';
+            tablero_jugador2[i][j] = '-';
+            tablero_ataque_jugador2[i][j] = '-';
+            j++;
+        }
+        i++;
+    }
+
+    // Posicionar barcos del Jugador 1
+    printf("Jugador 1, posiciona tus barcos:\n");
+    posicionarBarcos(tablero_jugador1);
+
+    // Posicionar barcos del Jugador 2 (Bot)
+    printf("Jugador 2 (Bot), posicionando sus barcos...\n");
+    posicionarBarcosBot(tablero_jugador2);
+
+    /// Debug para ver barcos del bot
+    //mostrarTableroPosicionado(tablero_jugador2);
+
+    int turno = 1;
+
+    // Bucle principal del juego
+    while (1) {
+        if (turno == 1) {
+            // Turno de ataque del Jugador 1
+            printf("\n¡Turno de ataque del Jugador 1!\n");
+            mostrarTableroPosicionado(tablero_jugador1);
+            ataqueJugador(tablero_jugador2, tablero_ataque_jugador1);
+            mostrarTablero(tablero_ataque_jugador1);
+            mostrarTablero(tablero_jugador2);
+
+            turno = 2;
+        } else {
+            // Turno de ataque del Jugador 2 (Bot)
+            printf("\n¡Turno de ataque del Jugador 2 (Bot)!\n");
+            AtaqueBot(tablero_jugador1, tablero_ataque_jugador2);
+            mostrarTablero(tablero_ataque_jugador2);
+
+            turno = 1;
+        }
+
+        // Verificar ganador después de cada turno
+        int ganador = verificarGanador(tablero_ataque_jugador1, tablero_ataque_jugador2);
+        if (ganador == 1) {
+            printf("¡El Jugador 1 ha ganado! ¡Felicidades!\n");
+            break;
+        } else if (ganador == 2) {
+            printf("¡El Jugador 2 (Bot) ha ganado! Mejor suerte la próxima vez.\n");
+            break;
+        }
+    }
+
+    // Preguntar si se desea volver a jugar
+    printf("\n¿Deseas volver a jugar? (1: Sí / 0: No): ");
+    scanf("%d", &jugar_nuevamente);
+    printf("\n");
+
+    return 0;
+}
+

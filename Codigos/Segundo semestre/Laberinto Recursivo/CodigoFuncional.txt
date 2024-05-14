@@ -1,0 +1,117 @@
+#include <stdio.h>
+
+#define FILA 11
+#define COL 11
+
+char laberinto[FILA][COL];
+
+// Matrices para definir la dirección de los movimientos (arriba, derecha, abajo, izquierda)
+int mov_x[] = {0, 1, 0, -1};
+int mov_y[] = {1, 0, -1, 0};
+
+// Declaración de variables globales para el inicio del laberinto
+int inicio_x, inicio_y;
+
+// Función para imprimir el laberinto
+void imprimirLab() {
+    for (int i = 0; i < FILA; i++) {
+        for (int j = 0; j < COL; j++) {
+            printf("%c ", laberinto[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Función para cargar el laberinto desde un archivo
+int cargarLab(char *filename) {
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL) {
+        perror("No se pudo abrir el archivo");
+        return 0;
+    }
+
+    for (int i = 0; i < FILA; i++) {
+        for (int j = 0; j < COL; j++) {
+            char c;
+            fscanf(file, " %c", &c);
+
+            if (c == '0' || c == '1' || c == 'I' || c == 'F') {
+                laberinto[i][j] = c;
+            } else {
+                printf("Carácter no válido en el archivo: %c\n", c);
+                fclose(file);
+                return 0;
+            }
+        }
+    }
+
+    fclose(file);
+    return 1;
+}
+
+// Función recursiva para resolver el laberinto
+int resolverLab(int x, int y) {
+    if (x < 0 || x >= FILA || y < 0 || y >= COL) {
+        return 0;
+    }
+
+    if (laberinto[x][y] == 'F') {
+        return 1;
+    }
+
+    if (laberinto[x][y] == '1' || laberinto[x][y] == '.') {
+        return 0;
+    }
+
+    laberinto[x][y] = '.';
+
+    for (int i = 0; i < 4; i++) {
+        int nuevo_x = x + mov_x[i];
+        int nuevo_y = y + mov_y[i];
+
+        if (resolverLab(nuevo_x, nuevo_y)) {
+            return 1;
+        }
+    }
+
+    laberinto[x][y] = '0';
+    return 0;
+}
+
+// Función para encontrar la posición inicial en el laberinto
+int posInicial() {
+    for (int i = 0; i < FILA; i++) {
+        for (int j = 0; j < COL; j++) {
+            if (laberinto[i][j] == 'I') {
+                inicio_x = i;
+                inicio_y = j;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int main() {
+    if (!cargarLab("laberinto.txt")) {
+        return 1;
+    }
+
+    printf("Laberinto original:\n");
+    imprimirLab();
+
+    if (!posInicial()) {
+        printf("No se encontró el punto de inicio (I) en el laberinto.\n");
+        return 1;
+    }
+
+    if (resolverLab(inicio_x, inicio_y)) {
+        printf("\nLaberinto resuelto:\n");
+        imprimirLab();
+    } else {
+        printf("\nNo se encontró una solución para el laberinto.\n");
+    }
+    getchar();
+    return 0;
+}

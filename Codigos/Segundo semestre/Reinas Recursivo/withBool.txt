@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+#define N 4  // Cambia N al tamaño del tablero
+
+// Función para verificar si es seguro colocar una reina en la posición dada
+bool esSeguro(int tablero[N][N], int fila, int columna) {
+    // Verifica si no hay reinas en la misma columna
+    for (int i = 0; i < fila; i++) {
+        if (tablero[i][columna])
+            return false;
+    }
+
+    // Verifica la diagonal superior izquierda
+    for (int i = fila, j = columna; i >= 0 && j >= 0; i--, j--) {
+        if (tablero[i][j])
+            return false;
+    }
+
+    // Verifica la diagonal superior derecha
+    for (int i = fila, j = columna; i >= 0 && j < N; i--, j++) {
+        if (tablero[i][j])
+            return false;
+    }
+
+    return true;
+}
+
+// Función para imprimir el tablero
+void imprimirTablero(int tablero[N][N]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%2d ", tablero[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+// Función para inicializar el tablero con ceros
+void inicializarTablero(int tablero[N][N]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            tablero[i][j] = 0;
+        }
+    }
+}
+
+// Función recursiva para resolver el problema de las N reinas
+bool resolverNReinasRecursivo(int tablero[N][N], int fila, int *soluciones) {
+    // Si se ha colocado una reina en cada fila, se ha encontrado una solución
+    if (fila == N) {
+        (*soluciones)++;
+        printf("Solucion %d:\n", *soluciones);
+        imprimirTablero(tablero);
+        return false; // Continuar buscando más soluciones
+    }
+
+    bool solucionEncontrada = false;  // Variable para rastrear si se encuentra una solución en la llamada actual
+
+    // Iterar sobre cada columna en la fila actual
+    for (int columna = 0; columna < N; columna++) {
+        if (esSeguro(tablero, fila, columna)) {
+            tablero[fila][columna] = 1;  // Colocar una reina en la posición segura
+            
+            // Avanzar a la siguiente fila
+            if (!resolverNReinasRecursivo(tablero, fila + 1, soluciones)) {
+                // Retroceder si no se encuentra la solución en la siguiente fila
+                tablero[fila][columna] = 0;
+            } else {
+                // Solución encontrada en la llamada recursiva actual
+                solucionEncontrada = true;
+            }
+        }
+    }
+
+    return solucionEncontrada;
+}
+
+int main() {
+    int tablero[N][N];
+    
+    // Inicializa el tablero con ceros
+    inicializarTablero(tablero);
+
+    // Número de la solución asociada al tablero
+    int soluciones = 0;
+    
+    // Llama a la función recursiva para resolver el problema de las N reinas
+    resolverNReinasRecursivo(tablero, 0, &soluciones);
+    
+    // Mostrar un mensaje si no se encontraron soluciones
+    if (soluciones == 0) {
+        printf("No se encontraron soluciones.\n");
+    }
+
+    getchar();
+    return 0;
+}

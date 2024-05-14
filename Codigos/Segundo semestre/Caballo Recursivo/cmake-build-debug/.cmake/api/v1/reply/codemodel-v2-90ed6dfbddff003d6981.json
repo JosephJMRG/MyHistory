@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Caballo_Recursivo",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Caballo_Recursivo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Caballo_Recursivo-Debug-694e5e64ebd0cbad7af3.json",
+					"name" : "Caballo_Recursivo",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Personal Data/CLASES U/Introd. a la Inf/CLion/C\u00f3digos/Segundo semestre/Caballo Recursivo/cmake-build-debug",
+		"source" : "D:/Personal Data/CLASES U/Introd. a la Inf/CLion/C\u00f3digos/Segundo semestre/Caballo Recursivo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

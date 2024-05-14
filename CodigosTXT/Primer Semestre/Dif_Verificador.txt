@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+void calcularDigitoVerificador(int rut) {
+    int suma = 0;
+    int multiplicador = 2;
+
+    while (rut != 0) {
+        suma += (rut % 10) * multiplicador;
+        rut /= 10;
+        multiplicador++;
+
+        if (multiplicador > 7)
+            multiplicador = 2;
+    }
+
+    int digitoVerificador = 11 - (suma % 11);
+    if (digitoVerificador == 11)
+        printf("0");
+    else if (digitoVerificador == 10)
+        printf("K");
+    else
+        printf ("El numero verificador es %d "), digitoVerificador;
+}
+
+int main() {
+    int rut;
+    printf("Ingrese el RUT sin dígito verificador: ");
+    scanf("%d", &rut);
+
+    int digitoVerificador = calcularDigitoVerificador(rut);
+    printf("El dígito verificador es: ");
+    if (digitoVerificador == 'K')
+        printf("K\n");
+    else
+        printf("%d\n", digitoVerificador);
+
+    return 0;
+}

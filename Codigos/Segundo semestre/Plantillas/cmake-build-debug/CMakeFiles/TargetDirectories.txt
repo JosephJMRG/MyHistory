@@ -1,0 +1,3 @@
+D:/Personal Data/CLASES U/Introd. a la Inf/CLion/Códigos/Segundo semestre/Plantillas/cmake-build-debug/CMakeFiles/Plantillas.dir
+D:/Personal Data/CLASES U/Introd. a la Inf/CLion/Códigos/Segundo semestre/Plantillas/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Personal Data/CLASES U/Introd. a la Inf/CLion/Códigos/Segundo semestre/Plantillas/cmake-build-debug/CMakeFiles/rebuild_cache.dir

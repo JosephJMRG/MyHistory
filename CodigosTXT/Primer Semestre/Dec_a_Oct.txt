@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+// Función para convertir decimal a octal
+void DecimalAOctal(int decimal) {
+    int octal[100];
+    int i = 0;
+
+    // Convertir el decimal a octal
+    while (decimal > 0) {
+        octal[i] = decimal % 8;
+        decimal = decimal / 8;
+        i++;
+    }
+
+    // Imprimir el número octal en orden inverso
+    printf("El número en octal es: ");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("%d", octal[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int decimal;
+
+    printf("Ingrese un número decimal: ");
+    scanf("%d", &decimal);
+
+    DecimalAOctal(decimal);
+
+    return 0;
+}

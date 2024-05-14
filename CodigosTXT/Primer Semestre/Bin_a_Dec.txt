@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <math.h>
+
+void convertirBinarioADecimal() {
+    int x = 0, n = 0, decimal = 0;
+    char binario[100];
+
+    printf("Ingrese numero binario: ");
+    scanf("%s", binario);
+
+    while (binario[n] != '\0') {
+        n++;
+    }
+
+    while (n > 0) {
+        if (binario[n - 1] == '1') {
+            decimal += pow(2, x);
+        }
+        n--;
+        x++;
+    }
+
+    printf("El numero decimal es: %d\n", decimal);
+}
+
+int main() {
+    convertirBinarioADecimal();
+
+    return 0;
+}
